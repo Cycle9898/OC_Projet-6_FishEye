@@ -1,10 +1,12 @@
 @import url("photographer.css");
 
+/*General settings*/
+
 body {
     font-family: "DM Sans", sans-serif;
-    margin: 0;
 }
 
+/*Homepage*/
 
 header {
     display: flex;
@@ -14,7 +16,7 @@ header {
     height: 90px;
 }
 
-h1 {
+.main-title {
     color: #901C1C;
     margin-right: 100px;
 }
@@ -34,9 +36,9 @@ h1 {
 .photographer_section article {
     justify-self: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
 }
 
 .photographer_section article h2 {

@@ -20,7 +20,7 @@ class PhotographerFactory {
 
         const img = document.createElement('img');
         img.setAttribute("src", this.portrait);
-        img.setAttribute("alt", "");
+        img.setAttribute("alt", `Photo de profil de ${this.name}`);
 
         const h2 = document.createElement('h2');
         h2.textContent = this.name;

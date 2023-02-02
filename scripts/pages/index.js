@@ -1,13 +1,15 @@
 //Function to fetch photographers' data
 
 async function getPhotographers(targetedData) {
-    const photographersSection = document.querySelector(".photographer_section");
     return await fetch("data/photographers.json").then(response => {
         if (response.ok) {
             return response.json();
         } else {
             console.error("Network error, code : " + response.status);
-            photographersSection.innerHTML = "Erreur réseau lors de la récupération des données";
+
+            const photographersSection = document.querySelector(".photographer_section");
+            photographersSection.innerText = "Erreur réseau lors de la récupération des données";
+            photographersSection.style.color = "red"
         }
     })
         .then(json => json[targetedData])

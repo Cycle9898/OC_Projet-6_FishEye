@@ -1,17 +1,19 @@
 //Function to fetch photographers' data
 
-async function getPhotographers() {
-    return await fetch("/data/photographers.json").then(response => {
+async function getPhotographers(targetedData) {
+    const photographersSection = document.querySelector(".photographer_section");
+    return await fetch("data/photographers.json").then(response => {
         if (response.ok) {
             return response.json();
         } else {
-            throw "Network error: " + response.status;
+            console.error("Network error, code : " + response.status);
+            photographersSection.innerHTML = "Erreur réseau lors de la récupération des données";
         }
     })
-        .then(json => {
-            return json.photographers;
-        })
-        .catch(error => console.error(error));
+        .then(json => json[targetedData])
+        .catch(error => {
+            console.error(error)
+        });
 }
 
 //Display collected data
@@ -30,7 +32,7 @@ async function displayData(photographers) {
 
 async function init() {
     //Retrieve photographers' data and display it on homepage
-    const photographers = await getPhotographers();
+    const photographers = await getPhotographers("photographers");
     displayData(photographers);
 };
 

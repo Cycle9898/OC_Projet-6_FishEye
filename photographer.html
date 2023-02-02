@@ -4,6 +4,7 @@
 <head>
   <link href="css/normalize.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet"> <!--Add Minify here-->
+  <link href="css/photographer.css" rel="stylesheet"> <!--Add Minify here-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -13,7 +14,8 @@
 
 <body>
   <header>
-    <img src="assets/images/logo.png" alt="Logo de Fisheye" class="logo">
+    <a href="index.html" aria-label="lien vers la page d'accueil" class="logo-link"><img src="assets/images/logo.png"
+        alt="Logo de Fisheye"></a>
   </header>
 
   <main id="main">
@@ -39,10 +41,14 @@
     </div>
   </div>
 
+  <!--Factories-->
+  <script src="scripts/factories/photographerFactory.js"></script>
+
   <!--Utils-->
-  <script src="/scripts/utils/contactForm.js"></script>
+  <script src="scripts/utils/contactForm.js"></script>
+
   <!--Main script-->
-  <script src="/scripts/pages/photographer.js"></script>
+  <script src="scripts/pages/photographer.js"></script>
 </body>
 
 </html>

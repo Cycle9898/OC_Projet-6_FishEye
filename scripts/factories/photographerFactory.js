@@ -1,4 +1,4 @@
-//Create photographer card on homepage
+//Create photographer object
 
 class PhotographerFactory {
     constructor(data) {
@@ -27,6 +27,7 @@ class PhotographerFactory {
 
         const pLocation = document.createElement('p');
         pLocation.classList.add("location");
+        pLocation.setAttribute("lang", "en");
         pLocation.innerText = this.location;
 
         const pTagline = document.createElement('p');

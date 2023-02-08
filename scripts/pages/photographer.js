@@ -5,13 +5,17 @@ function getPhotographerId() {
     return Number(urlParams.get('id'));
 }
 
-//Function to display photographer's data in .photograph-header and .photograph-stat
+//Function to display photographer's data in .photograph-header, .photograph-stat and .modal
 
 function displayPhotographerData(photographer) {
     document.title = `Fisheye - ${photographer.name}`;
 
     const photographerHeader = document.querySelector(".photograph-header");
     const photographerStat = document.querySelector(".photograph-stat");
+    const contactModalHeader = document.querySelector("#modal-title");
+
+    const modalSpan = document.createElement('span');
+    modalSpan.innerText = photographer.name;
 
     const div = document.createElement('div');
     div.setAttribute("role", "none");
@@ -42,6 +46,7 @@ function displayPhotographerData(photographer) {
     photographerHeader.appendChild(div);
     photographerHeader.appendChild(img);
     photographerStat.appendChild(spanPrice);
+    contactModalHeader.appendChild(modalSpan);
 }
 
 //Function to display photographer's media in .photograph-media

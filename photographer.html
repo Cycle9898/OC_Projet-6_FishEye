@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <header>
+  <header id="header">
     <a href="index.html" aria-label="Revenir à la page d'accueil" class="logo"><img src="assets/images/logo.png"
         alt="Logo de Fisheye"></a>
   </header>
@@ -30,20 +30,49 @@
     </section>
   </main>
 
-  <div id="contact_modal">
+  <div id="contact-modal" aria-hidden="true" role="dialog" aria-describedby="modal-title">
     <div class="modal">
       <header>
-        <h1>Contactez-moi</h1>
-        <img src="assets/icons/close.svg" alt="Bouton de fermeture de la modale" onclick="closeModal()">
+        <h1 id="modal-title">Contactez-moi</h1>
+        <img src="assets/icons/close.svg" alt="" role="button" tabindex="0" aria-label="Fermer la modale"
+          onclick="closeModal()">
       </header>
 
-      <form>
-        <div>
-          <label>Prénom</label>
-          <input>
+      <form id="contact-form" name="contact-me" onsubmit="sendForm(event)">
+        <div class="form-data">
+          <div class="form-label-error-duo"><label id="label-first" for="first">Prénom</label><span id="error-first"
+              class="error-message">Ce champs doit contenir
+              au minimum 2 caractères</span></div>
+          <input type="text" id="first" name="first" minlength="2" aria-labelledby="label-first">
         </div>
-        <button class="contact_button" type="submit">Envoyer</button>
+
+        <div class="form-data">
+          <div class="form-label-error-duo"><label id="label-last" for="last">Nom</label><span id="error-last"
+              class="error-message">Ce champs doit contenir
+              au minimum 2 caractères</span></div>
+          <input type="text" id="last" name="last" minlength="2" aria-labelledby="label-last">
+        </div>
+
+        <div class="form-data">
+          <div class="form-label-error-duo"><label id="label-email" for="email">Email</label><span id="error-email"
+              class="error-message">Ce champs doit contenir
+              un email valide</span></div>
+          <input type="email" id="email" name="email" aria-labelledby="label-email">
+        </div>
+
+        <div class="form-data">
+          <div class="form-label-error-duo"><label id="label-message" for="message">Votre message</label><span
+              id="error-textarea" class="error-message">Ce champs est requis</span></div>
+          <textarea name="message" id="message" cols="31" rows="5" minlength="2" maxlength="500"
+            aria-labelledby="label-message"></textarea>
+        </div>
+
+        <button class="contact_button no-transition" type="submit" aria-label="Envoyez votre message">Envoyer</button>
       </form>
+
+      <div id="confirmation-message" aria-hidden="true">
+        <p>Votre message a été envoyé !</p>
+      </div>
     </div>
   </div>
 

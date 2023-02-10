@@ -8,13 +8,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/2ace82d5de.js" crossorigin="anonymous"></script>
   <title>Fisheye - photographe </title>
 </head>
 
 <body>
-  <header id="header">
+  <header id="header" role="banner">
     <a href="index.html" aria-label="Revenir à la page d'accueil" class="logo"><img src="assets/images/logo.png"
         alt="Logo de Fisheye"></a>
   </header>
@@ -26,7 +26,7 @@
     </section>
 
     <section class="photograph-media">
-      <div role="none" class="media-grid"></div>
+      <div class="media-grid"></div>
     </section>
   </main>
 
@@ -76,6 +76,24 @@
     </div>
   </div>
 
+  <div id="light-box-modal" aria-hidden="true" role="dialog" aria-label="Aperçu d'un medium">
+    <div class="light-box">
+      <div class="light-box-left-part">
+        <img src="assets/icons/previous-primary-color.svg" alt="" role="button" tabindex="4"
+          aria-label="Afficher le medium précédent" id="previous-light-box" onclick="changeLightBoxMedium('previous')">
+      </div>
+
+      <ul class="light-box-view"></ul>
+
+      <div class="light-box-right-part">
+        <img src="assets/icons/close-primary-color.svg" alt="" role="button" tabindex="1" aria-label="Fermer la modale"
+          id="close-light-box" onclick="closeLightBox()">
+        <img src="assets/icons/next-primary-color.svg" alt="" role="button" tabindex="3"
+          aria-label="Afficher le medium suivant" id="next-light-box" onclick="changeLightBoxMedium('next')">
+      </div>
+    </div>
+  </div>
+
   <!--Factories-->
   <script src="scripts/factories/photographerFactory.js"></script>
   <script src="scripts/factories/mediaFactory.js"></script>
@@ -83,6 +101,7 @@
   <!--Utils-->
   <script src="scripts/utils/globalFunctions.js"></script>
   <script src="scripts/utils/contactForm.js"></script>
+  <script src="scripts/utils/lightBoxModal.js"></script>
 
   <!--Main script-->
   <script src="scripts/pages/photographer.js"></script>

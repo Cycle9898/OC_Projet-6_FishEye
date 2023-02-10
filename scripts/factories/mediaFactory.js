@@ -2,7 +2,6 @@
 
 class MediaFactory {
     constructor(medium, photographer) {
-        this._medium = medium
         this._id = medium.id;
         this._photographerId = medium.photographerId;
         this._photographerName = photographer.name;
@@ -28,6 +27,10 @@ class MediaFactory {
         return this._likes;
     }
 
+    get mediumId() {
+        return this._id;
+    }
+
     //Build HTML elements for photographer's media
     getMediaDOM() {
         const article = document.createElement('article');
@@ -39,8 +42,15 @@ class MediaFactory {
         img.setAttribute("role", "button");
         img.setAttribute("aria-label", `Cliquez pour ${this.mediaReadLabel}`);
 
+        //Mouse and keyboard event listener for light box opening
+        img.setAttribute("onclick", `launchLightBox(${this.mediumId})`);
+        img.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                launchLightBox(this.mediumId);
+            }
+        });
+
         const div = document.createElement('div');
-        div.setAttribute("role", "none");
 
         const h2 = document.createElement('h2');
         h2.setAttribute("lang", "en");
@@ -97,7 +107,7 @@ class VideoFactory extends MediaFactory {
         this._video = medium.video;
     }
 
-    getFullVideo() {
+    get fullVideo() {
         return `assets/media/${this.photographerName}_${this.photographerId}/${this._video}`;
     }
 

@@ -47,34 +47,34 @@ function closeModal() {
 
 //Call closeModal() when "Escape" key is pressed or "Enter" key on close button
 
-modal.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
+modal.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
         closeModal();
     }
 });
 
-firstFocusOnModal.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
+firstFocusOnModal.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
         closeModal();
     }
 });
 
 //Keyboard focus management on modal
 
-modal.addEventListener("keydown", e => {
-    if (!(e.key === 'Tab')) {
+modal.addEventListener("keydown", event => {
+    if (!(event.key === 'Tab')) {
         return;
     }
 
-    if (e.shiftKey) {  //when shift + tab is pressed
+    if (event.shiftKey) {  //when shift + tab is pressed
         if (document.activeElement === firstFocusOnModal) {
             lastFocusOnModal.focus();
-            e.preventDefault();
+            event.preventDefault();
         }
     } else {  //when tab is pressed
         if (document.activeElement === lastFocusOnModal) {
             firstFocusOnModal.focus();
-            e.preventDefault();
+            event.preventDefault();
         }
     }
 });

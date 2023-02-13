@@ -1,22 +1,26 @@
-//Function to fetch photographer's ID from URL
+//Fetch photographer's ID from URL
 
 function getPhotographerId() {
     const urlParams = (new URL(document.location)).searchParams;
     return Number(urlParams.get('id'));
 }
 
-//Function to display photographer's data in .photograph-header, .photograph-stat and .modal
+//Display photographer's data in .photograph-header, .photograph-stat and .modal
 
 function displayPhotographerData(photographer) {
+    //Update page's title
     document.title = `Fisheye - ${photographer.name}`;
 
+    //DOM elements
     const photographerHeader = document.querySelector(".photograph-header");
     const photographerStat = document.querySelector(".photograph-stat");
     const contactModalHeader = document.querySelector("#modal-title");
 
+    //Add photographer name in contact modal header
     const modalSpan = document.createElement('span');
     modalSpan.innerText = photographer.name;
 
+    //Add data in .photograph-header
     const div = document.createElement('div');
 
     const h1 = document.createElement('h1');
@@ -35,24 +39,41 @@ function displayPhotographerData(photographer) {
     img.setAttribute("src", photographer.portrait);
     img.setAttribute("alt", `Photo de profil de ${photographer.name}`);
 
+    //Add data in .photograph-stat (bottom right of the window)
     const spanPrice = document.createElement('span');
     spanPrice.classList.add("price");
     spanPrice.innerText = photographer.price;
 
+    const pTotalLikes = document.createElement("p");
+    pTotalLikes.classList.add("likes-total");
+
+    const numberSpan = document.createElement("span");
+    const heartSpan = document.createElement("span");
+
+    numberSpan.classList.add("likes-number");
+
+    heartSpan.classList.add("fa-solid");
+    heartSpan.classList.add("fa-heart");
+    heartSpan.setAttribute("aria-label", 'Nombres de "likes"');
+
+    //All appendChild()
     div.appendChild(h1);
     div.appendChild(pLocation);
     div.appendChild(pTagline);
     photographerHeader.appendChild(div);
     photographerHeader.appendChild(img);
+    pTotalLikes.appendChild(numberSpan);
+    pTotalLikes.appendChild(heartSpan);
+    photographerStat.appendChild(pTotalLikes);
     photographerStat.appendChild(spanPrice);
     contactModalHeader.appendChild(modalSpan);
 }
 
-//Array to store media objects
+//Array to store built media objects for further use (light box and total number of "likes")
 
 const createdMediaObjects = [];
 
-//Function to display photographer's media in .photograph-media
+//Display photographer's media in .photograph-media
 
 function displayPhotographerMedia(media, photographer) {
     const mediaContainer = document.querySelector(".media-grid");
@@ -60,17 +81,17 @@ function displayPhotographerMedia(media, photographer) {
     media.forEach((medium) => {
         if (medium.hasOwnProperty("image")) {
             const imageMedium = new ImageFactory(medium, photographer);
-            const mediaDOM = imageMedium.getMediaDOM()
+            const mediaDOM = imageMedium.getMediaDOM();
             mediaContainer.appendChild(mediaDOM);
 
-            //store it in createdMediaObjects array for further use
+            //store it in createdMediaObjects array
             createdMediaObjects.push(imageMedium);
         } else if (medium.hasOwnProperty("video")) {
             const videoMedium = new VideoFactory(medium, photographer);
-            const mediaDOM = videoMedium.getMediaDOM()
+            const mediaDOM = videoMedium.getMediaDOM();
             mediaContainer.appendChild(mediaDOM);
 
-            //store it in createdMediaObjects array for further use
+            //store it in createdMediaObjects array
             createdMediaObjects.push(videoMedium);
         } else {
             throw "Unknown medium";
@@ -78,6 +99,18 @@ function displayPhotographerMedia(media, photographer) {
     });
 }
 
+//Update total "likes" number
+
+function updateTotalLikesNumber() {
+    const numberSpan = document.querySelector(".likes-number");
+
+    let totalLikes = 0;
+    createdMediaObjects.forEach(createdMedium => {
+        totalLikes += createdMedium.likes;
+    })
+
+    numberSpan.innerText = totalLikes;
+}
 
 //Main function to build photographer's page
 
@@ -99,6 +132,9 @@ async function init() {
     });
     //Display current photographer 's media on his/her page
     displayPhotographerMedia(CurrentPhotographerMedia, photographer);
+
+    //Display total "likes" number
+    updateTotalLikesNumber();
 }
 
 init();

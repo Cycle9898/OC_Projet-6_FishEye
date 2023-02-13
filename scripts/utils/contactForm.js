@@ -79,7 +79,7 @@ modal.addEventListener("keydown", event => {
     }
 });
 
-//Function that check if an input is valid according to its "type" attribute
+//Check if an input is valid according to its "type" attribute
 
 function checkForm(input) {
     switch (input["type"]) {
@@ -114,7 +114,7 @@ function checkForm(input) {
 
 }
 
-//Function that hide all modal elements and display form confirmation message
+//Hide all modal elements and display form confirmation message
 
 function displayConfirmationMessage() {
     modalHeaderH1.style.visibility = "hidden";
@@ -140,7 +140,7 @@ formInputs[2].addEventListener("input", checkEmail);
 function checkMessage() { checkForm(formInputs[3]); }
 formInputs[3].addEventListener("input", checkMessage);
 
-//Function to check all inputs and simulate sending data 
+//Check all inputs and simulate sending data 
 
 function sendForm(event) {
     event.preventDefault();

@@ -1,4 +1,4 @@
-//Function to fetch any photographers' data or media
+//Fetch any photographers' data or media
 
 async function getPhotographersData() {
     return fetch("data/photographers.json").then(response => {
@@ -13,6 +13,6 @@ async function getPhotographersData() {
         }
     })
         .catch(error => {
-            console.error(error)
+            console.error(error);
         });
 };

@@ -65,12 +65,14 @@ lightBox.addEventListener("keydown", event => {
     }
 });
 
-//Function that load all media into the light box and display the selected one 
+//Load all media into the light box and display the selected one 
 
 function displayInLightBox(media, currentMediumId) {
     media.forEach(medium => {
+        //DOM element
         const lightBoxView = document.querySelector("#light-box-modal .light-box-view");
 
+        //Build light box view
         const li = document.createElement("li");
         li.classList.add("built-medium-container");
         if (medium.mediumId === currentMediumId) {
@@ -98,12 +100,13 @@ function displayInLightBox(media, currentMediumId) {
         const h1 = document.createElement("h1");
         h1.innerText = medium.title;
 
+        //All appendChild()
         li.appendChild(h1);
         lightBoxView.appendChild(li);
     });
 }
 
-//Function to display previous or next medium
+//Display previous or next medium
 
 function changeLightBoxMedium(direction) {
     const mediaArray = Array.from(lightBox.querySelectorAll(".built-medium-container"));

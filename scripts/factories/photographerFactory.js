@@ -12,6 +12,7 @@ class PhotographerFactory {
     }
 
     getUserCardDOM() {
+        //Photograph card on homepage
         const article = document.createElement('article');
 
         const link = document.createElement('a');
@@ -38,6 +39,7 @@ class PhotographerFactory {
         pPrice.classList.add("price");
         pPrice.innerText = this.price;
 
+        //All appendChild()
         link.appendChild(img);
         link.appendChild(h2);
         article.appendChild(link);
@@ -65,7 +67,7 @@ class PhotographerFactory {
     }
 
     get price() {
-        return `${this._price}€/jour`;
+        return `${this._price}€ / jour`;
     }
 
     get portrait() {

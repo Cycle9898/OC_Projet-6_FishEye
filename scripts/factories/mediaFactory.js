@@ -31,8 +31,8 @@ class MediaFactory {
         return this._id;
     }
 
-    //Build HTML elements for photographer's media
     getMediaDOM() {
+        //medium card on photographer's page
         const article = document.createElement('article');
 
         const img = document.createElement('img');
@@ -40,7 +40,7 @@ class MediaFactory {
         img.setAttribute("alt", this.title);
         img.setAttribute("tabindex", "0");
         img.setAttribute("role", "button");
-        img.setAttribute("aria-label", `Cliquez pour ${this.mediaReadLabel}`);
+        img.setAttribute("aria-label", `Cliquez ou appuyez sur "Entrée" pour ${this.mediaReadLabel}`);
 
         //Mouse and keyboard event listener for light box opening
         img.setAttribute("onclick", `launchLightBox(${this.mediumId})`);
@@ -61,14 +61,42 @@ class MediaFactory {
         const span = document.createElement('span');
         span.classList.add('likes-number');
         span.setAttribute("aria-label", 'Nombres de "likes"');
-        span.innerText = this.likes
+        span.innerText = this.likes;
 
         const heartIcon = document.createElement('span');
         heartIcon.classList.add('fa-regular');
         heartIcon.classList.add('fa-heart');
         heartIcon.setAttribute("role", "button");
-        heartIcon.setAttribute("aria-label", 'Cliquez pour "liker" ce medium');
+        heartIcon.setAttribute("aria-label", 'Cliquez ou appuyez sur "Entrée" pour "liker" ce medium');
+        heartIcon.setAttribute("tabindex", "0");
 
+        //Update "likes" numbers and change heart button appearance when a medium is liked
+
+        const likesNumberHandling = () => {
+            if (heartIcon.classList.contains("liked")) {
+                heartIcon.classList.remove("liked");
+                this._likes -= 1;
+                span.innerText = this.likes;
+                //Update total "likes" number on page
+                updateTotalLikesNumber();
+            } else {
+                heartIcon.classList.add("liked");
+                this._likes += 1;
+                span.innerText = this.likes;
+                //Update total "likes" number on page
+                updateTotalLikesNumber();
+            }
+        }
+
+        heartIcon.addEventListener("click", likesNumberHandling);
+
+        heartIcon.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                likesNumberHandling();
+            }
+        });
+
+        //All appendChild()
         article.appendChild(img);
         div.appendChild(h2);
         pLikes.appendChild(span);

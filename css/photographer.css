@@ -273,6 +273,7 @@ form label {
     color: #312E2E;
     font-size: 2.25em;
     line-height: 50px;
+    white-space: nowrap;
 }
 
 form textarea,

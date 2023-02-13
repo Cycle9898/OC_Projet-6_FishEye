@@ -126,19 +126,9 @@ function displayConfirmationMessage() {
     confirmationMessage.setAttribute("aria-hidden", "false");
 }
 
-//Function warps and event listeners on inputs for dynamic checks
+//Event listeners on all inputs for dynamic checks
 
-function checkFirstName() { checkForm(formInputs[0]); }
-formInputs[0].addEventListener("input", checkFirstName);
-
-function checkLastName() { checkForm(formInputs[1]); }
-formInputs[1].addEventListener("input", checkLastName);
-
-function checkEmail() { checkForm(formInputs[2]); }
-formInputs[2].addEventListener("input", checkEmail);
-
-function checkMessage() { checkForm(formInputs[3]); }
-formInputs[3].addEventListener("input", checkMessage);
+formInputs.forEach(formInput => formInput.addEventListener("input", function () { checkForm(this) }));
 
 //Check all inputs and simulate sending data 
 

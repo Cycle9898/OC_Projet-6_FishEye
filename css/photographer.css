@@ -111,6 +111,25 @@
     margin: 0px 50px 100px;
 }
 
+#order-by-label,
+#order-by {
+    font-size: 1.13em;
+    font-weight: 700;
+}
+
+#order-by {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    margin-left: 25px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+#order-by option {
+    font-weight: 700;
+}
+
 .media-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

@@ -26,6 +26,17 @@
     </section>
 
     <section class="photograph-media">
+      <div>
+        <label for="order-by" id="order-by-label">Trier par</label>
+        <select name="order-by" id="order-by" aria-labelledby="order-by-label">
+          <option value="popularity-asc">Popularité - croissant</option>
+          <option value="popularity-desc">Popularité - décroissant</option>
+          <option value="date-asc">Date - croissant</option>
+          <option value="date-desc">Date - décroissant</option>
+          <option value="title">Titre - alphabétique</option>
+        </select>
+      </div>
+
       <div class="media-grid"></div>
     </section>
   </main>

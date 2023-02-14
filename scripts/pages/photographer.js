@@ -102,14 +102,46 @@ function displayPhotographerMedia(media, photographer) {
 //Update total "likes" number
 
 function updateTotalLikesNumber() {
-    const numberSpan = document.querySelector(".likes-number");
+    const totalLikesCounter = document.querySelector(".likes-number");
 
     let totalLikes = 0;
     createdMediaObjects.forEach(createdMedium => {
         totalLikes += createdMedium.likes;
     })
 
-    numberSpan.innerText = totalLikes;
+    totalLikesCounter.innerText = totalLikes;
+}
+
+//Sort media by type (popularity ascending, ...)
+
+function sortMedia(media, sortType) {
+    switch (sortType) {
+        case "popularity-asc":
+            return media.sort((a, b) => a.likes - b.likes);
+
+        case "popularity-desc":
+            return media.sort((a, b) => b.likes - a.likes);
+
+        case "date-asc":
+            return media.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+
+        case "date-desc":
+            return media.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+
+        case "title":
+            return media.sort((a, b) => {
+                if (a.title < b.title) {
+                    return -1;
+                } else if (a.title > b.title) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
+        default:
+            throw "Unknown sort type";
+    }
 }
 
 //Main function to build photographer's page
@@ -127,11 +159,22 @@ async function init() {
     displayPhotographerData(photographer);
 
     //Get current photographer's media
-    const CurrentPhotographerMedia = photographersData.media.filter((media) => {
+    const currentPhotographerMedia = photographersData.media.filter((media) => {
         return media.photographerId === photographerId;
     });
-    //Display current photographer 's media on his/her page
-    displayPhotographerMedia(CurrentPhotographerMedia, photographer);
+
+    //Display current photographer's media, sorted by popularity - ascending, on his/her page
+    displayPhotographerMedia(sortMedia(currentPhotographerMedia, "popularity-asc"), photographer);
+
+    //Event listener for sorting media
+    const selectOrder = document.getElementById("order-by");
+
+    selectOrder.addEventListener("change", (event) => {
+        const mediaContainer = document.querySelector(".media-grid");
+        mediaContainer.innerHTML = "";
+
+        displayPhotographerMedia(sortMedia(currentPhotographerMedia, event.target.value), photographer);
+    });
 
     //Display total "likes" number
     updateTotalLikesNumber();

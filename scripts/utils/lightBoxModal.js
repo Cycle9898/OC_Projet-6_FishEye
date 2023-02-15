@@ -10,8 +10,8 @@ const lightBoxPreviousBtn = document.querySelector("#previous-light-box");
 //Launch light box modal with the selected medium
 
 function launchLightBox(currentMediumId) {
-    displayInLightBox(createdMediaObjects, currentMediumId);
     lightBox.style.display = "block";
+    displayInLightBox(currentMediumId);
     lightBox.setAttribute("aria-hidden", "false");
     mainHeader.setAttribute("aria-hidden", "true");
     mainTag.setAttribute("aria-hidden", "true");
@@ -24,11 +24,18 @@ function launchLightBox(currentMediumId) {
 function closeLightBox() {
     lightBox.style.display = "none";
     lightBox.setAttribute("aria-hidden", "true");
+    const lightBoxViewItems = document.querySelectorAll(".light-box-view .built-medium-container");
+    for (let item of lightBoxViewItems) {
+        if (item.style.display === "block") {
+            item.style.display = "none";
+            break;
+        }
+    }
+
     mainHeader.removeAttribute("aria-hidden");
     mainTag.removeAttribute("aria-hidden");
     body.removeAttribute("style");
     mainHeader.querySelector(".logo").focus();
-    lightBox.querySelector(".light-box-view").innerHTML = "";
 }
 
 //Close light box when "Escape" key is pressed or "Enter" key on close button
@@ -65,9 +72,9 @@ lightBox.addEventListener("keydown", event => {
     }
 });
 
-//Load all media into the light box and display the selected one 
+//Load all media into the light box
 
-function displayInLightBox(media, currentMediumId) {
+function loadLightBox(media) {
     media.forEach(medium => {
         //DOM element
         const lightBoxView = document.querySelector("#light-box-modal .light-box-view");
@@ -75,11 +82,8 @@ function displayInLightBox(media, currentMediumId) {
         //Build light box view
         const li = document.createElement("li");
         li.classList.add("built-medium-container");
-        if (medium.mediumId === currentMediumId) {
-            li.style.display = "block";
-        } else {
-            li.style.display = "none";
-        }
+        li.style.display = "none";
+        li.setAttribute("data-id", medium.mediumId);
 
         if (medium instanceof VideoFactory) {
             const videoTag = document.createElement("video");
@@ -106,31 +110,46 @@ function displayInLightBox(media, currentMediumId) {
     });
 }
 
+//Display the selected medium in the light box
+
+function displayInLightBox(mediumId) {
+    //DOM element
+    const lightBoxViewItems = document.querySelectorAll(".light-box-view .built-medium-container");
+
+    for (let item of lightBoxViewItems) {
+        if (item.getAttribute("data-id") == mediumId) {
+            item.style.display = "block";
+            break;
+        }
+    }
+}
+
 //Display previous or next medium
 
 function changeLightBoxMedium(direction) {
-    const mediaArray = Array.from(lightBox.querySelectorAll(".built-medium-container"));
-    const arrayMaxIndex = mediaArray.length - 1;
+    //Make an array with .light-box-view nodes list
+    const lightBoxViewItemsArray = Array.from(lightBox.querySelectorAll(".light-box-view .built-medium-container"));
+    const arrayMaxIndex = lightBoxViewItemsArray.length - 1;
 
-    for (builtMedium of mediaArray) {
-        if (builtMedium.style.display === "block") {
-            builtMedium.style.display = "none";
+    for (let arrayItem of lightBoxViewItemsArray) {
+        if (arrayItem.style.display === "block") {
+            arrayItem.style.display = "none";
 
-            const currentIndex = mediaArray.indexOf(builtMedium);
+            const currentIndex = lightBoxViewItemsArray.indexOf(arrayItem);
             switch (direction) {
                 case "previous":
                     if (currentIndex === 0) {
-                        mediaArray[arrayMaxIndex].style.display = "block";
+                        lightBoxViewItemsArray[arrayMaxIndex].style.display = "block";
                     } else {
-                        mediaArray[currentIndex - 1].style.display = "block";
+                        lightBoxViewItemsArray[currentIndex - 1].style.display = "block";
                     }
                     break;
 
                 case "next":
                     if (currentIndex === arrayMaxIndex) {
-                        mediaArray[0].style.display = "block";
+                        lightBoxViewItemsArray[0].style.display = "block";
                     } else {
-                        mediaArray[currentIndex + 1].style.display = "block";
+                        lightBoxViewItemsArray[currentIndex + 1].style.display = "block";
                     }
                     break;
 

@@ -69,44 +69,28 @@ function displayPhotographerData(photographer) {
     contactModalHeader.appendChild(modalSpan);
 }
 
-//Array to store built media objects for further use (light box and total number of "likes")
+//Display photographer's media in .photograph-media and load light box media
 
-const createdMediaObjects = [];
-
-//Display photographer's media in .photograph-media
-
-function displayPhotographerMedia(media, photographer) {
+function displayPhotographerMedia(media) {
     const mediaContainer = document.querySelector(".media-grid");
 
     media.forEach((medium) => {
-        if (medium.hasOwnProperty("image")) {
-            const imageMedium = new ImageFactory(medium, photographer);
-            const mediaDOM = imageMedium.getMediaDOM();
-            mediaContainer.appendChild(mediaDOM);
-
-            //store it in createdMediaObjects array
-            createdMediaObjects.push(imageMedium);
-        } else if (medium.hasOwnProperty("video")) {
-            const videoMedium = new VideoFactory(medium, photographer);
-            const mediaDOM = videoMedium.getMediaDOM();
-            mediaContainer.appendChild(mediaDOM);
-
-            //store it in createdMediaObjects array
-            createdMediaObjects.push(videoMedium);
-        } else {
-            throw "Unknown medium";
-        }
+        const mediumDOM = medium.getMediaDOM();
+        mediaContainer.appendChild(mediumDOM);
     });
+
+    //Load in light box
+    loadLightBox(media);
 }
 
-//Update total "likes" number
+//Display total "likes" number
 
-function updateTotalLikesNumber() {
+function displayTotalLikesNumber(media) {
     const totalLikesCounter = document.querySelector(".likes-number");
 
     let totalLikes = 0;
-    createdMediaObjects.forEach(createdMedium => {
-        totalLikes += createdMedium.likes;
+    media.forEach(medium => {
+        totalLikes += medium.likes;
     })
 
     totalLikesCounter.innerText = totalLikes;
@@ -163,21 +147,35 @@ async function init() {
         return media.photographerId === photographerId;
     });
 
-    //Display current photographer's media, sorted by popularity - ascending, on his/her page
-    displayPhotographerMedia(sortMedia(currentPhotographerMedia, "popularity-asc"), photographer);
+    //Use MediaFactory to create media objects with currentPhotographerMedia
+    const builtMedia = currentPhotographerMedia.map(medium => {
+        if (medium.hasOwnProperty("image")) {
+            return new ImageFactory(medium, photographer);
+        } else if (medium.hasOwnProperty("video")) {
+            return new VideoFactory(medium, photographer);
+        } else {
+            throw "Unknown medium";
+        }
+    });
+
+    //Display current photographer's media, sorted by popularity - ascending, on his/her page and load light box media
+    displayPhotographerMedia(sortMedia(builtMedia, "popularity-asc"));
 
     //Event listener for sorting media
     const selectOrder = document.getElementById("order-by");
 
     selectOrder.addEventListener("change", (event) => {
+        //Emptying .media-grid and .light-box-view before sorting and regenerating media
         const mediaContainer = document.querySelector(".media-grid");
         mediaContainer.innerHTML = "";
+        const lightBoxView = document.querySelector("#light-box-modal .light-box-view");
+        lightBoxView.innerHTML = "";
 
-        displayPhotographerMedia(sortMedia(currentPhotographerMedia, event.target.value), photographer);
+        displayPhotographerMedia(sortMedia(builtMedia, event.target.value));
     });
 
     //Display total "likes" number
-    updateTotalLikesNumber();
+    displayTotalLikesNumber(builtMedia);
 }
 
 init();

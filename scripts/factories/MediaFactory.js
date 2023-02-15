@@ -1,4 +1,4 @@
-//Media factory : classes to create an object according to its type
+//Media factory : template design pattern to create an object according to its type
 
 class MediaFactory {
     constructor(medium, photographer) {
@@ -9,6 +9,8 @@ class MediaFactory {
         this._likes = medium.likes;
         this._date = medium.date;
         this._price = medium.price;
+
+        this.isLiked = false;
     }
 
     get photographerName() {
@@ -29,6 +31,10 @@ class MediaFactory {
 
     get mediumId() {
         return this._id;
+    }
+
+    get date() {
+        return this._date;
     }
 
     getMediaDOM() {
@@ -69,22 +75,29 @@ class MediaFactory {
         heartIcon.setAttribute("role", "button");
         heartIcon.setAttribute("aria-label", 'Cliquez ou appuyez sur "Entrée" pour "liker" ce medium');
         heartIcon.setAttribute("tabindex", "0");
+        if (this.isLiked) {
+            heartIcon.classList.add("liked");
+        }
 
-        //Update "likes" numbers and change heart button appearance when a medium is liked
+        //Update "likes" numbers and change heart button appearance when a medium is liked + event listeners
 
         const likesNumberHandling = () => {
+            const totalLikesCounter = document.querySelector(".likes-number");
+
             if (heartIcon.classList.contains("liked")) {
                 heartIcon.classList.remove("liked");
                 this._likes -= 1;
                 span.innerText = this.likes;
+                this.isLiked = false;
                 //Update total "likes" number on page
-                updateTotalLikesNumber();
+                totalLikesCounter.innerText = Number(totalLikesCounter.innerText) - 1;
             } else {
                 heartIcon.classList.add("liked");
                 this._likes += 1;
                 span.innerText = this.likes;
+                this.isLiked = true;
                 //Update total "likes" number on page
-                updateTotalLikesNumber();
+                totalLikesCounter.innerText = Number(totalLikesCounter.innerText) + 1;
             }
         }
 

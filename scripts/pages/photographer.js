@@ -88,12 +88,8 @@ function displayPhotographerMedia(media) {
 function displayTotalLikesNumber(media) {
     const totalLikesCounter = document.querySelector(".likes-number");
 
-    let totalLikes = 0;
-    media.forEach(medium => {
-        totalLikes += medium.likes;
-    })
-
-    totalLikesCounter.innerText = totalLikes;
+    totalLikesCounter.innerText = media.map(medium => medium.likes)
+        .reduce((totalLikesNumber, currentLikesNumber) => totalLikesNumber + currentLikesNumber);
 }
 
 //Sort media by type (popularity ascending, ...)
@@ -136,16 +132,14 @@ async function init() {
     const photographerId = getPhotographerId();
 
     //Get current photographer's data and display it on his/her page
-    const photographerData = photographersData.photographers.find((photographers) => {
-        return photographers.id === photographerId;
-    });
+    const photographerData = photographersData.photographers
+        .find(photographers => photographers.id === photographerId);
     const photographer = new PhotographerFactory(photographerData);
     displayPhotographerData(photographer);
 
     //Get current photographer's media
-    const currentPhotographerMedia = photographersData.media.filter((media) => {
-        return media.photographerId === photographerId;
-    });
+    const currentPhotographerMedia = photographersData.media
+        .filter(media => media.photographerId === photographerId);
 
     //Use MediaFactory to create media objects with currentPhotographerMedia
     const builtMedia = currentPhotographerMedia.map(medium => {
@@ -166,10 +160,8 @@ async function init() {
 
     selectOrder.addEventListener("change", (event) => {
         //Emptying .media-grid and .light-box-view before sorting and regenerating media
-        const mediaContainer = document.querySelector(".media-grid");
-        mediaContainer.innerHTML = "";
-        const lightBoxView = document.querySelector("#light-box-modal .light-box-view");
-        lightBoxView.innerHTML = "";
+        document.querySelector(".media-grid").innerHTML = "";
+        document.querySelector("#light-box-modal .light-box-view").innerHTML = "";
 
         displayPhotographerMedia(sortMedia(builtMedia, event.target.value));
     });

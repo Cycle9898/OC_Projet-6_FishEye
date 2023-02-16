@@ -31,21 +31,29 @@ function displayModal() {
 
 function closeModal() {
     modal.style.display = "none";
-    document.querySelector("form").reset();
-    formInputs.forEach(formInput => formInput.removeAttribute("style"));
-    formInputs.forEach(formInput => formInput.removeAttribute("aria-invalid"));
-    errorMessages.forEach(errorMessage => errorMessage.removeAttribute("style"));
-    ["style", "aria-hidden"].forEach(attribute => modalHeaderH1.removeAttribute(attribute));
-    ["style", "aria-hidden"].forEach(attribute => modalForm.removeAttribute(attribute));
-    ["style", "aria-hidden"].forEach(attribute => confirmationMessage.removeAttribute(attribute));
     modal.setAttribute("aria-hidden", "true");
     mainHeader.removeAttribute("aria-hidden");
     mainTag.removeAttribute("aria-hidden");
     body.removeAttribute("style");
     mainHeader.querySelector(".logo").focus();
+    document.querySelector("form").reset();
+    formInputs.forEach(input => input.removeAttribute("style"));
+    formInputs.forEach(input => input.removeAttribute("aria-invalid"));
+    formInputs.forEach(input => input.removeAttribute("data-error-visible"));
+    errorMessages.forEach(errorMessage => errorMessage.removeAttribute("style"));
+    [modalHeaderH1, modalForm, confirmationMessage].forEach(element => {
+        element.removeAttribute("style");
+        element.removeAttribute("aria-hidden");
+    });
 }
 
-//Call closeModal() when "Escape" key is pressed or "Enter" key on close button
+//Close modal event listener when "Enter" key on close button or "Escape" key is pressed or a click out of the form
+
+modal.addEventListener("click", event => {
+    if (event.target == event.currentTarget) {
+        closeModal();
+    }
+});
 
 modal.addEventListener("keydown", event => {
     if (event.key === "Escape") {
@@ -79,36 +87,47 @@ modal.addEventListener("keydown", event => {
     }
 });
 
-//Check if an input is valid according to its "type" attribute
+//Check if an input is valid according to its "type" attribute and display or not error message
 
 function checkForm(input) {
+    const hideErrorMessage = () => {
+        input.style.borderColor = "transparent";
+        input.setAttribute("aria-invalid", "false");
+        input.setAttribute("data-error-visible", "false");
+        input.parentNode.querySelector(".error-message").style.display = "none";
+    }
+    const displayErrorMessage = () => {
+        input.style.borderColor = "#720000";
+        input.setAttribute("aria-invalid", "true");
+        input.setAttribute("data-error-visible", "true");
+        input.parentNode.querySelector(".error-message").style.display = "block";
+    }
+
     switch (input["type"]) {
         case "email":
             const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$/; //RegExp of valid email
 
             if (emailPattern.test(input.value)) {
-                input.style.borderColor = "transparent";
-                input.setAttribute("aria-invalid", "false");
-                document.getElementById("error-email").style.display = "none";
+                hideErrorMessage();
             } else {
-                input.style.borderColor = "#720000";
-                input.setAttribute("aria-invalid", "true");
-                document.getElementById("error-email").style.display = "block";
+                displayErrorMessage();
             }
 
             break;
 
         case "text":
+            if (input.value.length >= 2) {
+                hideErrorMessage();
+            } else {
+                displayErrorMessage();
+            }
+            break;
 
         default:
-            if (input.value.length >= 2) {
-                input.style.borderColor = "transparent";
-                input.setAttribute("aria-invalid", "false");
-                input.parentNode.querySelector(".error-message").style.display = "none";
+            if (input.value.length >= 10) {
+                hideErrorMessage();
             } else {
-                input.style.borderColor = "#720000";
-                input.setAttribute("aria-invalid", "true");
-                input.parentNode.querySelector(".error-message").style.display = "block";
+                displayErrorMessage();
             }
     }
 
@@ -124,11 +143,12 @@ function displayConfirmationMessage() {
 
     confirmationMessage.style.display = "block";
     confirmationMessage.setAttribute("aria-hidden", "false");
+    firstFocusOnModal.focus();
 }
 
 //Event listeners on all inputs for dynamic checks
 
-formInputs.forEach(formInput => formInput.addEventListener("input", function () { checkForm(this) }));
+formInputs.forEach(formInput => formInput.addEventListener("input", () => checkForm(formInput)));
 
 //Check all inputs and simulate sending data 
 
@@ -137,11 +157,12 @@ function sendForm(event) {
 
     formInputs.forEach(formInput => checkForm(formInput));
 
-    //if form is valid, "send" data to the server and display confirmation message
-    const allDisplayAttributes = [];
-    errorMessages.forEach((errorMessage) => allDisplayAttributes.push(errorMessage.style.display));
+    //check if error messages are hidden to validate the form
+    const allDDataErrorVisibleAttributes = [];
+    formInputs.forEach((input) => allDDataErrorVisibleAttributes.push(input.getAttribute("data-error-visible")));
 
-    if (allDisplayAttributes.every((displayAttribute) => displayAttribute === "none")) {
+    if (allDDataErrorVisibleAttributes.every((attribute) => attribute === "false")) {
+        //simule data sending to the server and display confirmation message
         formInputs.forEach(input => console.log(input.parentNode.querySelector("label").innerText + ": " + input.value));
         displayConfirmationMessage();
     }

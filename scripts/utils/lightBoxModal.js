@@ -24,13 +24,9 @@ function launchLightBox(currentMediumId) {
 function closeLightBox() {
     lightBox.style.display = "none";
     lightBox.setAttribute("aria-hidden", "true");
-    const lightBoxViewItems = document.querySelectorAll(".light-box-view .built-medium-container");
-    for (let item of lightBoxViewItems) {
-        if (item.style.display === "block") {
-            item.style.display = "none";
-            break;
-        }
-    }
+    const lightBoxViewItems = Array.from(document.querySelectorAll(".light-box-view .built-medium-container"));
+    lightBoxViewItems.filter(item => item.style.display === "block")
+        .forEach(item => item.style.display = "none");
 
     mainHeader.removeAttribute("aria-hidden");
     mainTag.removeAttribute("aria-hidden");
@@ -113,52 +109,46 @@ function loadLightBox(media) {
 //Display the selected medium in the light box
 
 function displayInLightBox(mediumId) {
-    //DOM element
-    const lightBoxViewItems = document.querySelectorAll(".light-box-view .built-medium-container");
+    //DOM elements array
+    const lightBoxViewItems = Array.from(document.querySelectorAll(".light-box-view .built-medium-container"));
 
-    for (let item of lightBoxViewItems) {
-        if (item.getAttribute("data-id") == mediumId) {
-            item.style.display = "block";
-            break;
-        }
-    }
+    lightBoxViewItems.find(item => item.getAttribute("data-id") == mediumId).style.display = "block";
 }
 
 //Display previous or next medium
 
 function changeLightBoxMedium(direction) {
     //Make an array with .light-box-view nodes list
-    const lightBoxViewItemsArray = Array.from(lightBox.querySelectorAll(".light-box-view .built-medium-container"));
-    const arrayMaxIndex = lightBoxViewItemsArray.length - 1;
+    const lightBoxViewItems = Array.from(lightBox.querySelectorAll(".light-box-view .built-medium-container"));
+    const arrayMaxIndex = lightBoxViewItems.length - 1;
 
-    for (let arrayItem of lightBoxViewItemsArray) {
-        if (arrayItem.style.display === "block") {
-            arrayItem.style.display = "none";
+    //Find current displayed item then hide it and display another one
+    const currentDisplayedItem = lightBoxViewItems.find(item => item.style.display === "block");
+    const currentIndex = lightBoxViewItems.indexOf(currentDisplayedItem);
 
-            const currentIndex = lightBoxViewItemsArray.indexOf(arrayItem);
-            switch (direction) {
-                case "previous":
-                    if (currentIndex === 0) {
-                        lightBoxViewItemsArray[arrayMaxIndex].style.display = "block";
-                    } else {
-                        lightBoxViewItemsArray[currentIndex - 1].style.display = "block";
-                    }
-                    break;
+    currentDisplayedItem.style.display = "none";
 
-                case "next":
-                    if (currentIndex === arrayMaxIndex) {
-                        lightBoxViewItemsArray[0].style.display = "block";
-                    } else {
-                        lightBoxViewItemsArray[currentIndex + 1].style.display = "block";
-                    }
-                    break;
-
-                default:
-                    throw "Unknown direction";
+    switch (direction) {
+        case "previous":
+            if (currentIndex === 0) {
+                lightBoxViewItems[arrayMaxIndex].style.display = "block";
+            } else {
+                lightBoxViewItems[currentIndex - 1].style.display = "block";
             }
             break;
-        }
+
+        case "next":
+            if (currentIndex === arrayMaxIndex) {
+                lightBoxViewItems[0].style.display = "block";
+            } else {
+                lightBoxViewItems[currentIndex + 1].style.display = "block";
+            }
+            break;
+
+        default:
+            throw "Unknown direction";
     }
+
 }
 
 //Display previous or next medium when an arrow key is pressed or "Enter" key on arrow buttons

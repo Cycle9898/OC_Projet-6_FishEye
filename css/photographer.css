@@ -139,6 +139,7 @@
 }
 
 .media-grid article img {
+    display: block;
     width: 100%;
     height: 300px;
     border-radius: 5px;
@@ -146,7 +147,6 @@
     object-position: 50% 30%;
     cursor: pointer;
     transition: transform 300ms;
-
 }
 
 .media-grid article img:hover,

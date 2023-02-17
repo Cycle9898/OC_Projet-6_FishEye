@@ -162,7 +162,7 @@ function sendForm(event) {
     formInputs.forEach((input) => allDDataErrorVisibleAttributes.push(input.getAttribute("data-error-visible")));
 
     if (allDDataErrorVisibleAttributes.every((attribute) => attribute === "false")) {
-        //simule data sending to the server and display confirmation message
+        //simulate data sending to the server and display confirmation message
         formInputs.forEach(input => console.log(input.parentNode.querySelector("label").innerText + ": " + input.value));
         displayConfirmationMessage();
     }

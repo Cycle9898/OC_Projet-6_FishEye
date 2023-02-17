@@ -14,7 +14,7 @@ class MediaFactory {
     }
 
     get photographerName() {
-        return this._photographerName;
+        return this._photographerName.split(" ").join("_");
     }
 
     get photographerId() {
@@ -41,22 +41,25 @@ class MediaFactory {
         //medium card on photographer's page
         const article = document.createElement('article');
 
-        const img = document.createElement('img');
-        img.setAttribute("src", this.thumbnailImage);
-        img.setAttribute("alt", this.title);
-        img.setAttribute("tabindex", "0");
-        img.setAttribute("role", "button");
-        img.setAttribute("aria-label", `Cliquez ou appuyez sur "Entrée" pour ${this.mediaReadLabel}`);
-
+        const imgDiv = document.createElement('div');
+        imgDiv.classList.add("thumbnail-container");
+        imgDiv.setAttribute("role", "button");
+        imgDiv.setAttribute("tabindex", "0");
+        imgDiv.setAttribute("aria-label", `Cliquez ou appuyez sur "Entrée" pour ${this.mediaReadLabel}`);
         //Mouse and keyboard event listener for light box opening
-        img.setAttribute("onclick", `launchLightBox(${this.mediumId})`);
-        img.addEventListener("keydown", event => {
+        imgDiv.addEventListener("click", () => launchLightBox(this.mediumId));
+        imgDiv.addEventListener("keydown", event => {
             if (event.key === "Enter") {
                 launchLightBox(this.mediumId);
             }
         });
 
-        const div = document.createElement('div');
+        const img = document.createElement('img');
+        img.setAttribute("src", this.thumbnailImage);
+        img.setAttribute("alt", this.title);
+
+        const titleDiv = document.createElement('div');
+        titleDiv.classList.add("title-container");
 
         const h2 = document.createElement('h2');
         h2.setAttribute("lang", "en");
@@ -66,14 +69,13 @@ class MediaFactory {
 
         const span = document.createElement('span');
         span.classList.add('likes-number');
-        span.setAttribute("aria-label", 'Nombres de "likes"');
         span.innerText = this.likes;
 
         const heartIcon = document.createElement('span');
         heartIcon.classList.add('fa-regular');
         heartIcon.classList.add('fa-heart');
         heartIcon.setAttribute("role", "button");
-        heartIcon.setAttribute("aria-label", 'Cliquez ou appuyez sur "Entrée" pour "liker" ce medium');
+        heartIcon.setAttribute("aria-label", "like");
         heartIcon.setAttribute("tabindex", "0");
         if (this.isLiked) {
             heartIcon.classList.add("liked");
@@ -110,12 +112,13 @@ class MediaFactory {
         });
 
         //All appendChild()
-        article.appendChild(img);
-        div.appendChild(h2);
+        imgDiv.appendChild(img);
+        titleDiv.appendChild(h2);
         pLikes.appendChild(span);
         pLikes.appendChild(heartIcon);
-        div.appendChild(pLikes);
-        article.appendChild(div);
+        titleDiv.appendChild(pLikes);
+        article.appendChild(imgDiv);
+        article.appendChild(titleDiv);
 
         return article;
     }

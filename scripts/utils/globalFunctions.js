@@ -15,4 +15,4 @@ async function getPhotographersData() {
         .catch(error => {
             console.error(error);
         });
-};
+}

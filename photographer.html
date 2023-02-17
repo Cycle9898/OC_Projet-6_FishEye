@@ -3,8 +3,8 @@
 
 <head>
   <link href="css/normalize.min.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet"> <!--Add Minify here-->
-  <link href="css/photographer.css" rel="stylesheet"> <!--Add Minify here-->
+  <link href="css/style.min.css" rel="stylesheet">
+  <link href="css/photographer.min.css" rel="stylesheet">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <header id="header" role="banner">
+  <header id="header">
     <a href="index.html" aria-label="Revenir à la page d'accueil" class="logo"><img src="assets/images/logo.png"
         alt="Logo de Fisheye"></a>
   </header>
@@ -22,7 +22,7 @@
   <main id="main">
     <section class="photograph-header">
       <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
-      <article class="photograph-stat"></article>
+      <div class="photograph-stat"></div>
     </section>
 
     <section class="photograph-media">
@@ -45,8 +45,8 @@
     <div class="modal">
       <header>
         <h1 id="modal-title">Contactez-moi</h1>
-        <img src="assets/icons/close.svg" alt="" role="button" tabindex="0" aria-label="Fermer la modale"
-          onclick="closeModal()">
+        <img src="assets/icons/close.svg" alt="Fermer la modale" role="button" tabindex="0"
+          aria-label="Fermer la modale" onclick="closeModal()">
       </header>
 
       <form id="contact-form" name="contact-me" onsubmit="sendForm(event)">
@@ -91,16 +91,16 @@
   <div id="light-box-modal" aria-hidden="true" role="dialog" aria-label="Aperçu d'un medium">
     <div class="light-box">
       <div class="light-box-left-part">
-        <img src="assets/icons/previous-primary-color.svg" alt="" role="button" tabindex="4"
+        <img src="assets/icons/previous-primary-color.svg" alt="Afficher le medium précédent" role="button" tabindex="4"
           aria-label="Afficher le medium précédent" id="previous-light-box" onclick="changeLightBoxMedium('previous')">
       </div>
 
       <ul class="light-box-view"></ul>
 
       <div class="light-box-right-part">
-        <img src="assets/icons/close-primary-color.svg" alt="" role="button" tabindex="1" aria-label="Fermer la modale"
-          id="close-light-box" onclick="closeLightBox()">
-        <img src="assets/icons/next-primary-color.svg" alt="" role="button" tabindex="3"
+        <img src="assets/icons/close-primary-color.svg" alt="Fermer la modale" role="button" tabindex="1"
+          aria-label="Fermer la modale" id="close-light-box" onclick="closeLightBox()">
+        <img src="assets/icons/next-primary-color.svg" alt="Afficher le medium suivant" role="button" tabindex="3"
           aria-label="Afficher le medium suivant" id="next-light-box" onclick="changeLightBoxMedium('next')">
       </div>
     </div>

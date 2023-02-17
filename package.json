@@ -1,0 +1,15 @@
+{
+  "name": "oc_projet-6_fisheye",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cycle9898/OC_Projet-6_FishEye.git"
+  },
+  "author": "Cycle9898",
+  "homepage": "https://cycle9898.github.io/OC_Projet-6_FishEye/",
+  "devDependencies": {
+    "eslint": "^8.34.0"
+  }
+}

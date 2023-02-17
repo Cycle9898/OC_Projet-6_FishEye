@@ -22,6 +22,7 @@ function displayPhotographerData(photographer) {
 
     //Add data in .photograph-header
     const div = document.createElement('div');
+    div.classList.add("photographer-data-container");
 
     const h1 = document.createElement('h1');
     h1.innerText = photographer.name;
@@ -40,9 +41,9 @@ function displayPhotographerData(photographer) {
     img.setAttribute("alt", `Photo de profil de ${photographer.name}`);
 
     //Add data in .photograph-stat (bottom right of the window)
-    const spanPrice = document.createElement('span');
-    spanPrice.classList.add("price");
-    spanPrice.innerText = photographer.price;
+    const pPrice = document.createElement('p');
+    pPrice.classList.add("price");
+    pPrice.innerText = photographer.price;
 
     const pTotalLikes = document.createElement("p");
     pTotalLikes.classList.add("likes-total");
@@ -54,7 +55,7 @@ function displayPhotographerData(photographer) {
 
     heartSpan.classList.add("fa-solid");
     heartSpan.classList.add("fa-heart");
-    heartSpan.setAttribute("aria-label", 'Nombres de "likes"');
+    heartSpan.setAttribute("aria-label", '"likes" au total');
 
     //All appendChild()
     div.appendChild(h1);
@@ -65,7 +66,7 @@ function displayPhotographerData(photographer) {
     pTotalLikes.appendChild(numberSpan);
     pTotalLikes.appendChild(heartSpan);
     photographerStat.appendChild(pTotalLikes);
-    photographerStat.appendChild(spanPrice);
+    photographerStat.appendChild(pPrice);
     contactModalHeader.appendChild(modalSpan);
 }
 

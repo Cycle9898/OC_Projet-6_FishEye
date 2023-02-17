@@ -55,6 +55,7 @@ function displayPhotographerData(photographer) {
 
     heartSpan.classList.add("fa-solid");
     heartSpan.classList.add("fa-heart");
+    heartSpan.setAttribute("role", "img");
     heartSpan.setAttribute("aria-label", '"likes" au total');
 
     //All appendChild()
@@ -73,11 +74,91 @@ function displayPhotographerData(photographer) {
 //Display photographer's media in .photograph-media and load light box media
 
 function displayPhotographerMedia(media) {
-    const mediaContainer = document.querySelector(".media-grid");
-
+    //medium cards on photographer's page
     media.forEach((medium) => {
-        const mediumDOM = medium.getMediaDOM();
-        mediaContainer.appendChild(mediumDOM);
+        const mediaContainer = document.querySelector(".media-grid");
+
+        const article = document.createElement('article');
+
+        const imgDiv = document.createElement('div');
+        imgDiv.classList.add("thumbnail-container");
+        imgDiv.setAttribute("tabindex", "0");
+        imgDiv.setAttribute("role", "button");
+        imgDiv.setAttribute("aria-label", `Cliquez ou appuyez sur "Entrée" pour ${medium.mediaReadLabel}`);
+        //Mouse and keyboard event listener for light box opening
+        imgDiv.addEventListener("click", () => launchLightBox(medium.mediumId));
+        imgDiv.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                launchLightBox(medium.mediumId);
+            }
+        });
+
+        const img = document.createElement('img');
+        img.setAttribute("src", medium.thumbnailImage);
+        img.setAttribute("alt", medium.title);
+
+        const titleDiv = document.createElement('div');
+        titleDiv.classList.add("title-container");
+
+        const h2 = document.createElement('h2');
+        h2.setAttribute("lang", "en");
+        h2.innerText = medium.title;
+
+        const pLikes = document.createElement('p');
+
+        const span = document.createElement('span');
+        span.classList.add('likes-number');
+        span.innerText = medium.likes;
+
+        const heartIcon = document.createElement('span');
+        heartIcon.classList.add('fa-regular');
+        heartIcon.classList.add('fa-heart');
+        heartIcon.setAttribute("role", "button");
+        heartIcon.setAttribute("aria-label", "like");
+        heartIcon.setAttribute("tabindex", "0");
+        if (medium.isLiked) {
+            heartIcon.classList.add("liked");
+        }
+
+        //Update "likes" numbers and change heart button appearance when a medium is liked + event listeners
+
+        const likesNumberHandling = () => {
+            const totalLikesCounter = document.querySelector(".likes-number");
+
+            if (heartIcon.classList.contains("liked")) {
+                heartIcon.classList.remove("liked");
+                medium._likes -= 1;
+                span.innerText = medium.likes;
+                medium.isLiked = false;
+                //Update total "likes" number on page
+                totalLikesCounter.innerText = Number(totalLikesCounter.innerText) - 1;
+            } else {
+                heartIcon.classList.add("liked");
+                medium._likes += 1;
+                span.innerText = medium.likes;
+                medium.isLiked = true;
+                //Update total "likes" number on page
+                totalLikesCounter.innerText = Number(totalLikesCounter.innerText) + 1;
+            }
+        }
+
+        heartIcon.addEventListener("click", likesNumberHandling);
+
+        heartIcon.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                likesNumberHandling();
+            }
+        });
+
+        //All appendChild()
+        imgDiv.appendChild(img);
+        titleDiv.appendChild(h2);
+        pLikes.appendChild(span);
+        pLikes.appendChild(heartIcon);
+        titleDiv.appendChild(pLikes);
+        article.appendChild(imgDiv);
+        article.appendChild(titleDiv);
+        mediaContainer.appendChild(article);
     });
 
     //Load in light box
@@ -142,16 +223,8 @@ async function init() {
     const currentPhotographerMedia = photographersData.media
         .filter(media => media.photographerId === photographerId);
 
-    //Use MediaFactory to create media objects with currentPhotographerMedia
-    const builtMedia = currentPhotographerMedia.map(medium => {
-        if (medium.hasOwnProperty("image")) {
-            return new ImageFactory(medium, photographer);
-        } else if (medium.hasOwnProperty("video")) {
-            return new VideoFactory(medium, photographer);
-        } else {
-            throw "Unknown medium";
-        }
-    });
+    //Use MediaFactory to create medium objects with currentPhotographerMedia
+    const builtMedia = currentPhotographerMedia.map(medium => new MediaFactory(medium, photographer));
 
     //Display current photographer's media, sorted by popularity - ascending, on his/her page and load light box media
     displayPhotographerMedia(sortMedia(builtMedia, "popularity-asc"));

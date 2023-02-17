@@ -81,12 +81,22 @@ function loadLightBox(media) {
         li.style.display = "none";
         li.setAttribute("data-id", medium.mediumId);
 
-        if (medium instanceof VideoFactory) {
+        if (medium instanceof VideoMedium) {
             const videoTag = document.createElement("video");
             videoTag.setAttribute("controls", "");
-            videoTag.setAttribute("src", `${medium.fullVideo}`);
             videoTag.setAttribute("tabindex", "2");
 
+            const videoSource = document.createElement("source");
+            videoSource.setAttribute("src", `${medium.fullVideo}`);
+            videoSource.setAttribute("type", "video/mp4");
+
+            const altP = document.createElement("p");
+            altP.setAttribute("lang", "en");
+            altP.innerText = `${medium.title}`;
+
+            //AppendChild()
+            videoTag.appendChild(videoSource);
+            videoTag.appendChild(altP);
             li.appendChild(videoTag);
 
         } else {
@@ -94,13 +104,15 @@ function loadLightBox(media) {
             imageTag.setAttribute("src", `${medium.fullImage}`);
             imageTag.setAttribute("alt", `${medium.title}`);
 
+            //AppendChild()
             li.appendChild(imageTag);
         }
 
         const h1 = document.createElement("h1");
+        h1.setAttribute("lang", "en");
         h1.innerText = medium.title;
 
-        //All appendChild()
+        //AppendChild()
         li.appendChild(h1);
         lightBoxView.appendChild(li);
     });

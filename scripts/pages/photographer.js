@@ -95,7 +95,7 @@ function displayPhotographerMedia(media) {
 
         const img = document.createElement('img');
         img.setAttribute("src", medium.thumbnailImage);
-        img.setAttribute("alt", medium.title);
+        img.setAttribute("alt", `Miniature: ${medium.title}`);
 
         const titleDiv = document.createElement('div');
         titleDiv.classList.add("title-container");

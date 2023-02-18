@@ -85,14 +85,14 @@ function loadLightBox(media) {
             const videoTag = document.createElement("video");
             videoTag.setAttribute("controls", "");
             videoTag.setAttribute("tabindex", "2");
+            videoTag.setAttribute("aria-label", `Vidéo: ${medium.title}`);
 
             const videoSource = document.createElement("source");
             videoSource.setAttribute("src", `${medium.fullVideo}`);
             videoSource.setAttribute("type", "video/mp4");
 
             const altP = document.createElement("p");
-            altP.setAttribute("lang", "en");
-            altP.innerText = `${medium.title}`;
+            altP.innerText = "Votre navigateur ne peut pas lire ce type de contenu";
 
             //AppendChild()
             videoTag.appendChild(videoSource);
@@ -101,8 +101,9 @@ function loadLightBox(media) {
 
         } else {
             const imageTag = document.createElement("img");
+            imageTag.setAttribute("tabindex", "2");
             imageTag.setAttribute("src", `${medium.fullImage}`);
-            imageTag.setAttribute("alt", `${medium.title}`);
+            imageTag.setAttribute("alt", `Image: ${medium.title}`);
 
             //AppendChild()
             li.appendChild(imageTag);
